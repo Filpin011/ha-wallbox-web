@@ -20,8 +20,8 @@ def auto_enable_custom_integrations(enable_custom_integrations: Any) -> None:
 
 
 @pytest.fixture
-async def fake() -> AsyncGenerator[FakeWallboxWeb]:
-    """A running fake Wallbox WEB server with one station."""
+async def fake(socket_enabled: Any) -> AsyncGenerator[FakeWallboxWeb]:
+    """A running fake Wallbox WEB server with one station (a real localhost socket: `socket_enabled`)."""
     server = FakeWallboxWeb()
     server.add(make_station())
     server.url = await server.start()  # type: ignore[attr-defined]
