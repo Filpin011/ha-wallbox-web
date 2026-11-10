@@ -1,0 +1,281 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Wallbox WEB server",
+        "description": "Address of your Wallbox WEB server and an API token. Create the token in the app as administrator: Menu › API tokens › + (permissions: Read and commands).",
+        "data": {
+          "url": "URL",
+          "token": "API token",
+          "verify_ssl": "Verify SSL certificate"
+        },
+        "data_description": {
+          "url": "For example https://wallbox.example.com, without a trailing slash.",
+          "token": "Starts with wbx_. It is shown only once when created.",
+          "verify_ssl": "Turn off only for a self-signed certificate on your LAN."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Wallbox WEB",
+        "description": "The API token for {url} is no longer valid. Create a new one in the app (Menu › API tokens) and paste it here.",
+        "data": {
+          "token": "API token"
+        },
+        "data_description": {
+          "token": "Starts with wbx_."
+        }
+      },
+      "reconfigure": {
+        "title": "Change Wallbox WEB server",
+        "data": {
+          "url": "URL",
+          "verify_ssl": "Verify SSL certificate"
+        },
+        "data_description": {
+          "url": "New address of the same server.",
+          "verify_ssl": "Turn off only for a self-signed certificate on your LAN."
+        }
+      },
+      "hassio_confirm": {
+        "title": "Wallbox WEB add-on",
+        "description": "Do you want to configure Home Assistant to connect to the Wallbox WEB server provided by the add-on {addon}?"
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid or revoked API token",
+      "api_not_supported": "The server does not provide the Wallbox WEB API v1 (update Wallbox WEB, or check the URL)",
+      "invalid_url": "Enter a URL starting with http:// or https://",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Service is already configured",
+      "reauth_successful": "Re-authentication was successful",
+      "reconfigure_successful": "Re-configuration was successful",
+      "unique_id_mismatch": "This is a different Wallbox WEB server than the one configured",
+      "invalid_discovery_info": "The add-on sent incomplete connection data",
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "The add-on token was refused",
+      "api_not_supported": "The add-on does not provide the Wallbox WEB API v1",
+      "unknown": "Unexpected error"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "preparing": "Preparing",
+          "connected": "Vehicle connected",
+          "charging": "Charging",
+          "suspended_ev": "Suspended by vehicle",
+          "suspended_evse": "Suspended by station",
+          "end_charge": "Charge finished",
+          "faulted": "Faulted",
+          "not_available": "Not available",
+          "reserved": "Reserved",
+          "bootloader": "Bootloader",
+          "shutdown": "Shut down",
+          "rebooting": "Rebooting",
+          "suspended_no_power": "Suspended (no power)",
+          "unreachable": "Unreachable",
+          "undefined": "Undefined"
+        }
+      },
+      "power": {
+        "name": "Power",
+        "state_attributes": {
+          "charge_id": {
+            "name": "Charge id"
+          }
+        }
+      },
+      "session_energy": {
+        "name": "Session energy"
+      },
+      "lifetime_energy": {
+        "name": "Lifetime energy",
+        "state_attributes": {
+          "source": {
+            "name": "Source",
+            "state": {
+              "meter": "Station meter",
+              "accumulated": "Sum of charges"
+            }
+          }
+        }
+      },
+      "session_duration": {
+        "name": "Session duration"
+      },
+      "current_l1": {
+        "name": "Current L1"
+      },
+      "current_l2": {
+        "name": "Current L2"
+      },
+      "current_l3": {
+        "name": "Current L3"
+      },
+      "voltage": {
+        "name": "Voltage"
+      },
+      "max_available_power": {
+        "name": "Max available power"
+      },
+      "power_limit": {
+        "name": "Power limit"
+      },
+      "external_power": {
+        "name": "External power"
+      },
+      "error": {
+        "name": "Error",
+        "state": {
+          "none": "No error",
+          "rcdm": "RCDM – residual current",
+          "lide": "LIDE – lid open",
+          "vent": "VENT – ventilation",
+          "blck": "BLCK – socket lock",
+          "blef": "BLEF – lock fault",
+          "wifi": "WIFI – Wi-Fi module",
+          "mirr": "MIRR – mirror contact",
+          "rcbo": "RCBO – breaker tripped",
+          "cpse": "CPSE – control pilot short",
+          "ppse": "PPSE – proximity pilot short",
+          "cpls": "CPLS – control pilot lost",
+          "ppls": "PPLS – proximity pilot lost",
+          "vbus": "VBUS – supply",
+          "mfre": "MFRE – free mode",
+          "emtr": "EMTR – energy meter",
+          "ovce": "OVCE – overcurrent",
+          "rcte": "RCTE – residual current test",
+          "emex": "EMEX – external meter",
+          "chn2": "CHN2 – channel 2",
+          "penf": "PENF – PEN fault",
+          "hgtp": "HGTP – high temperature",
+          "unknown": "Unknown error"
+        },
+        "state_attributes": {
+          "errors": {
+            "name": "Active errors"
+          }
+        }
+      },
+      "active_schedules": {
+        "name": "Active schedules"
+      },
+      "last_charge_energy": {
+        "name": "Last charge energy"
+      },
+      "last_charge_cost": {
+        "name": "Last charge cost"
+      },
+      "last_charge_saving": {
+        "name": "Last charge saving"
+      },
+      "charge_card": {
+        "name": "Charge card"
+      }
+    },
+    "binary_sensor": {
+      "plugged": {
+        "name": "Plugged in"
+      },
+      "charging": {
+        "name": "Charging"
+      },
+      "problem": {
+        "name": "Problem"
+      },
+      "schedule_active": {
+        "name": "Schedule active"
+      },
+      "online": {
+        "name": "Reachable"
+      }
+    },
+    "button": {
+      "start": {
+        "name": "Start charging"
+      },
+      "pause": {
+        "name": "Pause charging"
+      },
+      "resume": {
+        "name": "Resume charging"
+      },
+      "stop": {
+        "name": "Stop charging"
+      }
+    },
+    "number": {
+      "max_current": {
+        "name": "Max current"
+      }
+    },
+    "select": {
+      "behaviour_mode": {
+        "name": "Behaviour mode",
+        "state": {
+          "free": "Free",
+          "personal": "Personal",
+          "net": "Network",
+          "ocpp": "OCPP"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "invalid_auth": {
+      "message": "The Wallbox WEB API token is invalid or was revoked"
+    },
+    "api_not_supported": {
+      "message": "The Wallbox WEB server does not provide the API v1 (update Wallbox WEB)"
+    },
+    "cannot_connect": {
+      "message": "Cannot reach the Wallbox WEB server: {error}"
+    },
+    "not_allowed_in_state": {
+      "message": "The station cannot do this in its current status {status}"
+    },
+    "free_mode": {
+      "message": "The station is in Free mode: charging starts by plugging in the vehicle"
+    },
+    "busy": {
+      "message": "Another command is running on the station, try again in a moment"
+    },
+    "procedure_failed": {
+      "message": "The station refused the command ({detail})"
+    },
+    "login_required": {
+      "message": "The station needs its PIN: open it once in the Wallbox WEB app"
+    },
+    "insufficient_permission": {
+      "message": "The API token is read-only: create a token with Read and commands permissions"
+    },
+    "station_unreachable": {
+      "message": "The station is not reachable"
+    },
+    "station_timeout": {
+      "message": "The station did not complete the command in time"
+    },
+    "rate_limited": {
+      "message": "Too many requests to Wallbox WEB, try again later"
+    },
+    "invalid_request": {
+      "message": "Invalid value: {error}"
+    },
+    "station_not_found": {
+      "message": "The station is no longer known to Wallbox WEB"
+    },
+    "command_failed": {
+      "message": "The command failed: {error}"
+    },
+    "mode_not_writable": {
+      "message": "The {mode} mode can only be set on the station"
+    }
+  }
+}

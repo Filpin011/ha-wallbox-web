@@ -1,0 +1,7 @@
+# Development instance (scripts/develop). Add Wallbox WEB from Settings > Devices & services.
+default_config:
+
+logger:
+  default: info
+  logs:
+    custom_components.wallbox_web: debug

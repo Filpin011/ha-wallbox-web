@@ -1,0 +1,2 @@
+# Home Assistant test harness matching the targeted Core (bump with Core releases; Dependabot keeps it current).
+pytest-homeassistant-custom-component==0.13.375

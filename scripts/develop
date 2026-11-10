@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Runs Home Assistant with this integration on http://localhost:8123 (config in ./config).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+mkdir -p config
+export PYTHONPATH="${PYTHONPATH:-}:${PWD}"
+hass --config "${PWD}/config" --debug

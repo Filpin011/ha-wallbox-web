@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Wallbox WEB card
+    url: https://github.com/Filpin011/wallbox-web-card/issues
+    about: Problems with the dashboard card go to the card repository.
+  - name: Security issue
+    url: https://github.com/Filpin011/ha-wallbox-web/security/advisories/new
+    about: Report vulnerabilities privately.

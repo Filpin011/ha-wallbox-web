@@ -1,0 +1,281 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Server Wallbox WEB",
+        "description": "Indirizzo del tuo server Wallbox WEB e un token API. Crea il token nell'app come amministratore: Menu › Token API › + (permessi: Lettura e comandi).",
+        "data": {
+          "url": "URL",
+          "token": "Token API",
+          "verify_ssl": "Verifica certificato SSL"
+        },
+        "data_description": {
+          "url": "Ad esempio https://wallbox.example.com, senza / finale.",
+          "token": "Inizia con wbx_. Viene mostrato una sola volta alla creazione.",
+          "verify_ssl": "Disattiva solo per un certificato autofirmato in LAN."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Riautentica Wallbox WEB",
+        "description": "Il token API per {url} non è più valido. Creane uno nuovo nell'app (Menu › Token API) e incollalo qui.",
+        "data": {
+          "token": "Token API"
+        },
+        "data_description": {
+          "token": "Inizia con wbx_."
+        }
+      },
+      "reconfigure": {
+        "title": "Modifica server Wallbox WEB",
+        "data": {
+          "url": "URL",
+          "verify_ssl": "Verifica certificato SSL"
+        },
+        "data_description": {
+          "url": "Nuovo indirizzo dello stesso server.",
+          "verify_ssl": "Disattiva solo per un certificato autofirmato in LAN."
+        }
+      },
+      "hassio_confirm": {
+        "title": "Add-on Wallbox WEB",
+        "description": "Vuoi configurare Home Assistant per collegarsi al server Wallbox WEB fornito dall'add-on {addon}?"
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi",
+      "invalid_auth": "Token API non valido o revocato",
+      "api_not_supported": "Il server non espone l'API v1 di Wallbox WEB (aggiorna Wallbox WEB o controlla l'URL)",
+      "invalid_url": "Inserisci un URL che inizi con http:// o https://",
+      "unknown": "Errore imprevisto"
+    },
+    "abort": {
+      "already_configured": "Il servizio è già configurato",
+      "reauth_successful": "La riautenticazione è stata completata con successo",
+      "reconfigure_successful": "La riconfigurazione è stata completata con successo",
+      "unique_id_mismatch": "Questo è un server Wallbox WEB diverso da quello configurato",
+      "invalid_discovery_info": "L'add-on ha inviato dati di connessione incompleti",
+      "cannot_connect": "Impossibile connettersi",
+      "invalid_auth": "Il token dell'add-on è stato rifiutato",
+      "api_not_supported": "L'add-on non espone l'API v1 di Wallbox WEB",
+      "unknown": "Errore imprevisto"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Stato",
+        "state": {
+          "idle": "Disponibile",
+          "preparing": "In preparazione",
+          "connected": "Veicolo connesso",
+          "charging": "In carica",
+          "suspended_ev": "Sospesa dal veicolo",
+          "suspended_evse": "Sospesa dalla colonnina",
+          "end_charge": "Ricarica terminata",
+          "faulted": "Guasto",
+          "not_available": "Non disponibile",
+          "reserved": "Prenotata",
+          "bootloader": "Bootloader",
+          "shutdown": "Spenta",
+          "rebooting": "Riavvio",
+          "suspended_no_power": "Sospesa (potenza assente)",
+          "unreachable": "Non raggiungibile",
+          "undefined": "Non definito"
+        }
+      },
+      "power": {
+        "name": "Potenza",
+        "state_attributes": {
+          "charge_id": {
+            "name": "Id ricarica"
+          }
+        }
+      },
+      "session_energy": {
+        "name": "Energia ricarica"
+      },
+      "lifetime_energy": {
+        "name": "Energia totale",
+        "state_attributes": {
+          "source": {
+            "name": "Origine",
+            "state": {
+              "meter": "Contatore colonnina",
+              "accumulated": "Somma ricariche"
+            }
+          }
+        }
+      },
+      "session_duration": {
+        "name": "Durata ricarica"
+      },
+      "current_l1": {
+        "name": "Corrente L1"
+      },
+      "current_l2": {
+        "name": "Corrente L2"
+      },
+      "current_l3": {
+        "name": "Corrente L3"
+      },
+      "voltage": {
+        "name": "Tensione"
+      },
+      "max_available_power": {
+        "name": "Potenza massima disponibile"
+      },
+      "power_limit": {
+        "name": "Limite di potenza"
+      },
+      "external_power": {
+        "name": "Potenza esterna"
+      },
+      "error": {
+        "name": "Errore",
+        "state": {
+          "none": "Nessun errore",
+          "rcdm": "RCDM – corrente di dispersione",
+          "lide": "LIDE – sportello aperto",
+          "vent": "VENT – ventilazione",
+          "blck": "BLCK – blocco presa",
+          "blef": "BLEF – guasto blocco",
+          "wifi": "WIFI – modulo Wi-Fi",
+          "mirr": "MIRR – contatto specchio",
+          "rcbo": "RCBO – interruttore intervenuto",
+          "cpse": "CPSE – corto control pilot",
+          "ppse": "PPSE – corto proximity pilot",
+          "cpls": "CPLS – control pilot perso",
+          "ppls": "PPLS – proximity pilot perso",
+          "vbus": "VBUS – alimentazione",
+          "mfre": "MFRE – modalità libera",
+          "emtr": "EMTR – contatore energia",
+          "ovce": "OVCE – sovracorrente",
+          "rcte": "RCTE – test dispersione",
+          "emex": "EMEX – contatore esterno",
+          "chn2": "CHN2 – canale 2",
+          "penf": "PENF – guasto PEN",
+          "hgtp": "HGTP – temperatura elevata",
+          "unknown": "Errore sconosciuto"
+        },
+        "state_attributes": {
+          "errors": {
+            "name": "Errori attivi"
+          }
+        }
+      },
+      "active_schedules": {
+        "name": "Programmazioni attive"
+      },
+      "last_charge_energy": {
+        "name": "Energia ultima ricarica"
+      },
+      "last_charge_cost": {
+        "name": "Costo ultima ricarica"
+      },
+      "last_charge_saving": {
+        "name": "Risparmio ultima ricarica"
+      },
+      "charge_card": {
+        "name": "Tessera ricarica"
+      }
+    },
+    "binary_sensor": {
+      "plugged": {
+        "name": "Connessa"
+      },
+      "charging": {
+        "name": "In carica"
+      },
+      "problem": {
+        "name": "Problema"
+      },
+      "schedule_active": {
+        "name": "Programmazione attiva"
+      },
+      "online": {
+        "name": "Raggiungibile"
+      }
+    },
+    "button": {
+      "start": {
+        "name": "Avvia ricarica"
+      },
+      "pause": {
+        "name": "Pausa ricarica"
+      },
+      "resume": {
+        "name": "Riprendi ricarica"
+      },
+      "stop": {
+        "name": "Ferma ricarica"
+      }
+    },
+    "number": {
+      "max_current": {
+        "name": "Corrente massima"
+      }
+    },
+    "select": {
+      "behaviour_mode": {
+        "name": "Modalità di funzionamento",
+        "state": {
+          "free": "Libera",
+          "personal": "Personale",
+          "net": "Rete",
+          "ocpp": "OCPP"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "invalid_auth": {
+      "message": "Il token API di Wallbox WEB non è valido o è stato revocato"
+    },
+    "api_not_supported": {
+      "message": "Il server Wallbox WEB non espone l'API v1 (aggiorna Wallbox WEB)"
+    },
+    "cannot_connect": {
+      "message": "Server Wallbox WEB non raggiungibile: {error}"
+    },
+    "not_allowed_in_state": {
+      "message": "La colonnina non può farlo nello stato attuale {status}"
+    },
+    "free_mode": {
+      "message": "La colonnina è in modalità Libera: la ricarica parte collegando il veicolo"
+    },
+    "busy": {
+      "message": "Un altro comando è in corso sulla colonnina, riprova tra poco"
+    },
+    "procedure_failed": {
+      "message": "La colonnina ha rifiutato il comando ({detail})"
+    },
+    "login_required": {
+      "message": "La colonnina richiede il PIN: aprila una volta nell'app Wallbox WEB"
+    },
+    "insufficient_permission": {
+      "message": "Il token API è di sola lettura: crea un token con permessi Lettura e comandi"
+    },
+    "station_unreachable": {
+      "message": "La colonnina non è raggiungibile"
+    },
+    "station_timeout": {
+      "message": "La colonnina non ha completato il comando in tempo"
+    },
+    "rate_limited": {
+      "message": "Troppe richieste a Wallbox WEB, riprova più tardi"
+    },
+    "invalid_request": {
+      "message": "Valore non valido: {error}"
+    },
+    "station_not_found": {
+      "message": "La colonnina non è più presente in Wallbox WEB"
+    },
+    "command_failed": {
+      "message": "Il comando non è riuscito: {error}"
+    },
+    "mode_not_writable": {
+      "message": "La modalità {mode} si imposta solo sulla colonnina"
+    }
+  }
+}

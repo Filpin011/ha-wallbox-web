@@ -1,0 +1,39 @@
+name: Bug report / Segnalazione
+description: Something does not work as expected. / Qualcosa non funziona.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Independent, unofficial project: do not contact the station manufacturer about it.
+        Never paste tokens, public URLs or serial numbers. / Non incollare token, URL pubblici o numeri di serie.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / Cosa è successo?
+    validations:
+      required: true
+  - type: input
+    id: ha
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.11.1"
+    validations:
+      required: true
+  - type: input
+    id: integration
+    attributes:
+      label: Integration version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: server
+    attributes:
+      label: Wallbox WEB server version (self-hosted or add-on)
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics / logs
+      description: Settings › Devices & services › Wallbox WEB › ⋮ › Download diagnostics (already redacted), plus debug logs.
+      render: text
