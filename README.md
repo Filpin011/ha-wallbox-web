@@ -1,147 +1,313 @@
-# Wallbox WEB per Home Assistant
+# Wallbox WEB for Home Assistant
 
-[![Apri in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Filpin011&repository=ha-wallbox-web&category=integration)
-[![Aggiungi integrazione](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=wallbox_web)
+🇮🇹 [Italiano](README.it.md)
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Filpin011&repository=ha-wallbox-web&category=integration)
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=wallbox_web)
 [![Validate](https://github.com/Filpin011/ha-wallbox-web/actions/workflows/validate.yml/badge.svg)](https://github.com/Filpin011/ha-wallbox-web/actions/workflows/validate.yml)
 [![Tests](https://github.com/Filpin011/ha-wallbox-web/actions/workflows/tests.yml/badge.svg)](https://github.com/Filpin011/ha-wallbox-web/actions/workflows/tests.yml)
 
-> **Progetto indipendente e non ufficiale.** Nato dallo studio di come le colonnine comunicano sulla rete locale
-> (interoperabilità). **Non è affiliato, approvato né supportato da SCAME PARRE S.p.A.** "Scame" e i marchi
-> collegati appartengono ai rispettivi titolari e sono citati solo per indicare i dispositivi compatibili. Nessuna
-> garanzia: lo usi a tuo rischio; gli interventi sull'impianto elettrico spettano a installatori qualificati.
-> Dettagli: [DISCLAIMER.md](DISCLAIMER.md).
+> **Independent, unofficial project.** It comes from a study of how the charging stations communicate on the local
+> network (interoperability). **Not affiliated with, endorsed or supported by SCAME PARRE S.p.A.** "Scame" and
+> related trademarks belong to their respective owners and are mentioned only to identify compatible devices. No
+> warranty: use it at your own risk; work on the electrical installation must be done by qualified installers.
+> Details: [DISCLAIMER.md](DISCLAIMER.md).
 
-Integrazione personalizzata che porta in Home Assistant le colonnine di ricarica gestite da **Wallbox WEB**
-(l'app web self-hosted per wallbox compatibili Scame su rete locale). Ogni colonnina diventa un **dispositivo** con
-sensori, comandi e il contatore di energia per la **dashboard Energia**. Per la card con l'aspetto dell'app vedi
-[wallbox-web-card](https://github.com/Filpin011/wallbox-web-card).
+Custom integration that brings the charging stations managed by **Wallbox WEB** (the self-hosted web app for
+Scame-compatible wallboxes on the local network) into Home Assistant. Every station becomes a **device** with
+sensors, commands and the energy meter for the **Energy dashboard**. For a card with the app's look see
+[wallbox-web-card](https://github.com/Filpin011/wallbox-web-card); the built-in Home Assistant cards work too
+([examples below](#use-the-built-in-home-assistant-cards)).
 
-![Icona](custom_components/wallbox_web/brand/icon.png)
+The integration follows your Home Assistant language: **English** by default, **Italian** available.
 
-## Requisiti
+![Icon](custom_components/wallbox_web/brand/icon.png)
 
-- Home Assistant **2026.11** o successivo (HAOS, Container o Core).
-- Un server **Wallbox WEB** con l'API v1, in uno dei due modi:
-  - **self-hosted** (Docker, Coolify, …) raggiungibile da Home Assistant, es. `https://wallbox.example.com`;
-  - **add-on** di Home Assistant (viene rilevato da solo).
-- Per il server self-hosted: un **token API** creato nell'app (vedi sotto).
+## Requirements
 
-L'integrazione non parla mai direttamente con la colonnina: passa dal server, che condivide l'unica connessione
-con la colonnina tra app, registratore delle ricariche e Home Assistant.
+- Home Assistant **2026.11** or later (HAOS, Container or Core).
+- A **Wallbox WEB** server with API v1, either:
+  - **self-hosted** (Docker, Coolify, …) and reachable from Home Assistant, e.g. `https://wallbox.example.com`;
+  - the Home Assistant **add-on** ([ha-wallbox-web-addon](https://github.com/Filpin011/ha-wallbox-web-addon)),
+    discovered automatically.
+- For a self-hosted server: an **API token** created in the app (see below).
 
-## Installazione
+The integration never talks to the station directly: it goes through the server, which shares its single connection
+to the station between the app, the charge recorder and Home Assistant.
 
-### Con HACS (consigliato)
+## Installation
 
-1. Premi il pulsante **Apri in HACS** qui sopra, oppure in HACS › ⋮ › **Repository personalizzati** aggiungi
-   `https://github.com/Filpin011/ha-wallbox-web` con tipo **Integrazione**.
-2. Cerca **Wallbox WEB** › **Scarica**.
-3. **Riavvia** Home Assistant (Impostazioni › Sistema › ⋮ › Riavvia).
+### With HACS (recommended)
 
-### Manuale (Samba / File editor / Studio Code Server)
+1. Press **Open in HACS** above, or in HACS › ⋮ › **Custom repositories** add
+   `https://github.com/Filpin011/ha-wallbox-web` with type **Integration**.
+2. Search for **Wallbox WEB** › **Download**.
+3. **Restart** Home Assistant (Settings › System › ⋮ › Restart).
 
-1. Scarica l'ultima [release](https://github.com/Filpin011/ha-wallbox-web/releases) e copia la cartella
-   `custom_components/wallbox_web` in `/config/custom_components/wallbox_web` (con l'add-on Samba:
+### Manual (Samba / File editor / Studio Code Server)
+
+1. Download the latest [release](https://github.com/Filpin011/ha-wallbox-web/releases) (`wallbox_web.zip`) and copy
+   its content to `/config/custom_components/wallbox_web` (with the Samba add-on:
    `\\homeassistant\config\custom_components\`).
-2. Riavvia Home Assistant.
+2. Restart Home Assistant.
 
-## Configurazione
+## Configuration
 
-### Server self-hosted
+### Self-hosted server
 
-1. In Wallbox WEB, come amministratore: **Menu › Token API › +**, nome `Home Assistant`, permessi
-   **Lettura e comandi** (o *Solo lettura* se vuoi solo i sensori). Copia il token `wbx_…`: è mostrato una volta sola.
-2. In Home Assistant: **Impostazioni › Dispositivi e servizi › Aggiungi integrazione › Wallbox WEB** (o il pulsante
-   qui sopra).
-3. Inserisci:
-   - **URL**: indirizzo del server, es. `https://wallbox.example.com` (senza `/` finale);
-   - **Token API**: il token `wbx_…`;
-   - **Verifica certificato SSL**: lascia attivo; disattivalo solo per un certificato autofirmato in LAN.
+1. In Wallbox WEB, as administrator: **Menu › API tokens › +**, name `Home Assistant`, permissions
+   **Read and commands** (or *Read only* if you only want the sensors). Copy the `wbx_…` token: it is shown only once.
+2. In Home Assistant: **Settings › Devices & services › Add integration › Wallbox WEB** (or the button above).
+3. Enter:
+   - **URL**: the server address, e.g. `https://wallbox.example.com` (no trailing `/`);
+   - **API token**: the `wbx_…` token;
+   - **Verify SSL certificate**: leave it on; turn it off only for a self-signed certificate on your LAN.
 
 ### Add-on
 
-Avvia l'add-on Wallbox WEB: Home Assistant mostra **"Nuovo dispositivo trovato: Wallbox WEB"** in Impostazioni ›
-Dispositivi e servizi. Premi **Configura** › **Invia**. Non serve inserire nulla.
+Start the Wallbox WEB add-on: Home Assistant shows **"New device discovered: Wallbox WEB"** in Settings › Devices &
+services. Press **Add** › **Submit**. Nothing to type.
 
-### Token revocato o URL cambiato
+### Revoked token or changed URL
 
-- Token non più valido → notifica **Riautenticazione necessaria**: incolla un nuovo token.
-- Nuovo indirizzo del server → ⋮ dell'integrazione › **Riconfigura**.
+- Token no longer valid → **Re-authentication required** notification: paste a new token.
+- New server address → integration ⋮ › **Reconfigure**.
 
-## Cosa ottieni
+## What you get
 
-Per ogni colonnina un dispositivo (produttore, modello, numero di serie, firmware, link alla pagina dell'app) con:
+One device per station (manufacturer, model, serial number, firmware, link to the station page in the app) with:
 
-| Tipo | Entità |
+| Type | Entities |
 |---|---|
-| Sensori | Stato, Potenza, Energia ricarica, **Energia totale**, Durata ricarica, Corrente L1 (L2/L3 su trifase, disattivate), Tensione (disattivata), Potenza massima disponibile, Limite di potenza, Potenza esterna (disattivata), Errore, Programmazioni attive, Energia / Costo / Risparmio ultima ricarica, Tessera (disattivata) |
-| Sensori binari | Connessa, In carica, Problema, Programmazione attiva, Raggiungibile |
-| Pulsanti | Avvia ricarica, Pausa ricarica, Riprendi ricarica, Ferma ricarica (attivi solo quando l'azione è possibile) |
-| Numero | Corrente massima (6 A … massimo della colonnina) |
-| Selezione | Modalità di funzionamento (Libera / Personale) |
+| Sensors | Status, Power, Session energy, **Lifetime energy**, Session duration, Current L1 (L2/L3 on three-phase, disabled), Voltage (disabled), Max available power, Power limit, External power (disabled), Error, Active schedules, Last charge energy / cost / saving, Charge card (disabled) |
+| Binary sensors | Plugged in, Charging, Problem, Schedule active, Reachable |
+| Buttons | Start charging, Pause charging, Resume charging, Stop charging (available only when the action is possible) |
+| Number | Max current (6 A … the station's maximum) |
+| Select | Behaviour mode (Free / Personal) |
 
-Le colonnine aggiunte dopo compaiono da sole. Aggiornamento dei dati: **push** (eventi dal server) con controllo di
-riserva ogni 30 secondi.
+Stations added later appear automatically. Data updates are **pushed** (server events) with a fallback check every
+30 seconds.
 
-### Dashboard Energia
+### Entity ids
 
-Impostazioni › Dashboard › **Energia** › *Consumo elettrico individuale dei dispositivi* › **Aggiungi dispositivo** ›
-scegli **`<colonnina> Energia totale`** (consumo istantaneo facoltativo: **`<colonnina> Potenza`**). Usa *Energia
-totale* (cresce sempre), non *Energia ricarica* (si azzera a ogni sessione).
+Entity ids are built from the device name and the entity name in the language Home Assistant had when the station
+was added. For a station named **Garage**:
 
-### Esempio di automazione
+| Entity | English | Italian |
+|---|---|---|
+| Status | `sensor.garage_status` | `sensor.garage_stato` |
+| Power | `sensor.garage_power` | `sensor.garage_potenza` |
+| Session energy | `sensor.garage_session_energy` | `sensor.garage_energia_ricarica` |
+| Lifetime energy | `sensor.garage_lifetime_energy` | `sensor.garage_energia_totale` |
+| Session duration | `sensor.garage_session_duration` | `sensor.garage_durata_ricarica` |
+| Power limit | `sensor.garage_power_limit` | `sensor.garage_limite_di_potenza` |
+| Last charge cost | `sensor.garage_last_charge_cost` | `sensor.garage_costo_ultima_ricarica` |
+| Charging | `binary_sensor.garage_charging` | `binary_sensor.garage_in_carica` |
+| Plugged in | `binary_sensor.garage_plugged_in` | `binary_sensor.garage_connessa` |
+| Start / Pause / Resume / Stop | `button.garage_start_charging`, `…_pause_charging`, `…_resume_charging`, `…_stop_charging` | `button.garage_avvia_ricarica`, `…_pausa_ricarica`, `…_riprendi_ricarica`, `…_ferma_ricarica` |
+| Max current | `number.garage_max_current` | `number.garage_corrente_massima` |
+| Behaviour mode | `select.garage_behaviour_mode` | `select.garage_modalita_di_funzionamento` |
+
+Check yours in Settings › Devices & services › Wallbox WEB › *your station*. The examples below use the English ids.
+
+### Energy dashboard
+
+Settings › Dashboards › **Energy** › *Individual devices* › **Add device** › choose **`<station> Lifetime energy`**
+(`sensor.garage_lifetime_energy`; optional power for the live view: **`<station> Power`**). Use *Lifetime energy*
+(always increasing), not *Session energy* (reset at every charge).
+
+### Automation example
 
 ```yaml
-alias: Avvisami a fine ricarica
+alias: Notify me when charging ends
 triggers:
   - trigger: state
-    entity_id: binary_sensor.garage_in_carica
+    entity_id: binary_sensor.garage_charging
     from: "on"
     to: "off"
 actions:
-  - action: notify.mobile_app_telefono
+  - action: notify.mobile_app_phone
     data:
       message: >-
-        Ricarica finita: {{ states('sensor.garage_energia_ultima_ricarica') }} kWh,
-        {{ states('sensor.garage_costo_ultima_ricarica') }} €
+        Charge finished: {{ states('sensor.garage_last_charge_energy') }} kWh,
+        {{ states('sensor.garage_last_charge_cost') }} €
 ```
 
-## Limiti noti
+## Use the built-in Home Assistant cards
 
-- Una ricarica avviata con una tessera RFID potrebbe non essere fermabile da Home Assistant (la colonnina può
-  rifiutare il comando).
-- Se il server non espone ancora l'API v1, la configurazione risponde "Il server non espone l'API v1": aggiorna
-  Wallbox WEB.
+Everything below works with the cards that ship with Home Assistant (no HACS needed). Replace `garage` with your
+station's id. In a **sections** dashboard, paste each card in *Edit dashboard › ⋮ › Raw configuration editor* or
+add the card from the picker and switch to the code editor.
 
-## Risoluzione problemi
+### Tile cards with features
 
-- **Impossibile connettersi**: apri l'URL dal browser della stessa rete di Home Assistant; controlla certificato e
-  porta.
-- **Pulsanti non disponibili**: il token è di sola lettura, oppure l'azione non è possibile nello stato attuale.
-- **Diagnostica**: Impostazioni › Dispositivi e servizi › Wallbox WEB › ⋮ › *Scarica diagnostica* (token, indirizzi
-  e numeri di serie sono oscurati). Log: ⋮ › *Abilita registrazione di debug*.
+```yaml
+# Live power with a 6 h trend and a bar gauge (0 … 7.4 kW)
+type: tile
+entity: sensor.garage_power
+name: Garage
+features_position: bottom
+features:
+  - type: trend-graph
+    hours_to_show: 6
+  - type: bar-gauge
+    min: 0
+    max: 7.4
+```
 
-## Rimozione
+```yaml
+# Status with its per-state icon (charging, paused, faulted, unreachable, …)
+type: tile
+entity: sensor.garage_status
+name: Garage
+```
 
-Impostazioni › Dispositivi e servizi › Wallbox WEB › ⋮ › **Elimina**; poi rimuovi l'integrazione da HACS (o la
-cartella `custom_components/wallbox_web`) e revoca il token nell'app.
+```yaml
+# Start / Stop: the "button" feature presses the button entity (greyed out when the action is not possible)
+type: tile
+entity: button.garage_start_charging
+name: Start charging
+features:
+  - type: button
+    action_name: Start
+```
 
----
+```yaml
+type: tile
+entity: button.garage_stop_charging
+name: Stop charging
+features:
+  - type: button
+    action_name: Stop
+```
 
-## English (short)
+```yaml
+# Behaviour mode and max current
+type: tile
+entity: select.garage_behaviour_mode
+features:
+  - type: select-options
+    style: buttons
+```
 
-> **Independent, unofficial project**, based on a study of how the stations communicate on the local network
-> (interoperability). **Not affiliated with, endorsed or supported by SCAME PARRE S.p.A.**; trademarks belong to
-> their owners and are used only to identify compatible devices. No warranty, use at your own risk; electrical work
-> must be done by qualified installers. See [DISCLAIMER.md](DISCLAIMER.md).
+```yaml
+type: tile
+entity: number.garage_max_current
+features:
+  - type: numeric-input
+    style: buttons
+```
 
-Custom integration for **Wallbox WEB** servers (self-hosted, or the Home Assistant add-on discovered automatically).
-Each charging station becomes a device with sensors (status, power, session / lifetime energy for the Energy
-dashboard, duration, currents, errors, last charge cost and saving), binary sensors, Start / Pause / Resume / Stop
-buttons, a max-current number and a behaviour-mode select. Push updates (server-sent events) with a 30 s polling
-fallback. Install through HACS (custom repository, category *Integration*) or copy `custom_components/wallbox_web`
-to `/config/custom_components/`, restart, then add *Wallbox WEB* with the server URL and an API token
-(app › Menu › API tokens). Requires Home Assistant 2026.11+.
+### Gauge card
+
+```yaml
+type: gauge
+entity: sensor.garage_power
+name: Charging power
+unit: kW
+min: 0
+max: 7.4          # your station's "Max available power"
+needle: true
+segments:
+  - from: 0
+    color: var(--info-color)
+  - from: 1.4
+    color: var(--success-color)
+  - from: 6.9
+    color: var(--warning-color)
+```
+
+### Entities card
+
+```yaml
+type: entities
+title: Garage wallbox
+entities:
+  - entity: sensor.garage_status
+  - entity: sensor.garage_power
+  - entity: sensor.garage_session_energy
+  - entity: sensor.garage_session_duration
+  - entity: binary_sensor.garage_plugged_in
+  - type: divider
+  - entity: button.garage_start_charging
+  - entity: button.garage_pause_charging
+  - entity: button.garage_resume_charging
+  - entity: button.garage_stop_charging
+  - type: divider
+  - entity: select.garage_behaviour_mode
+  - entity: number.garage_max_current
+  - type: divider
+  - entity: sensor.garage_last_charge_energy
+  - entity: sensor.garage_last_charge_cost
+  - entity: sensor.garage_last_charge_saving
+```
+
+### History graph of the power
+
+```yaml
+type: history-graph
+title: Charging power
+hours_to_show: 12
+entities:
+  - entity: sensor.garage_power
+  - entity: binary_sensor.garage_charging
+```
+
+### Statistics graph of the energy
+
+```yaml
+type: statistics-graph
+title: Energy per day
+entities:
+  - sensor.garage_lifetime_energy
+stat_types:
+  - change
+period: day
+days_to_show: 30
+chart_type: bar
+```
+
+### Energy dashboard and energy cards
+
+Add `sensor.garage_lifetime_energy` to the Energy dashboard (see [Energy dashboard](#energy-dashboard)). Then the
+energy cards show the charger next to the other devices, also outside the Energy dashboard:
+
+```yaml
+type: energy-devices-graph
+```
+
+```yaml
+type: energy-devices-detail-graph
+```
+
+### Planned
+
+Integration changes that would make the built-in cards better (not implemented yet):
+
+- **`switch.<station>_charging`** (on = start / resume, off = stop), so the tile card's `toggle` feature and a
+  single tap on the tile icon start and stop charging, instead of one tile per button.
+- A state-dependent icon for **Power** and **Session energy** (e.g. `mdi:flash-off` while not charging), so a
+  power tile shows idle vs. charging at a glance (the Status sensor already has per-state icons).
+- Max current and behaviour mode as regular (non-*configuration*) entities, so they appear in the auto-generated
+  dashboard and in area cards.
+
+## Known limits
+
+- A charge started with an RFID card may not be stoppable from Home Assistant (the station can refuse the command).
+- If the server does not expose API v1 yet, setup answers "The server does not expose API v1": update Wallbox WEB.
+
+## Troubleshooting
+
+- **Cannot connect**: open the URL from a browser on the same network as Home Assistant; check the certificate and
+  the port.
+- **Buttons unavailable**: the token is read-only, or the action is not possible in the current state.
+- **Diagnostics**: Settings › Devices & services › Wallbox WEB › ⋮ › *Download diagnostics* (tokens, addresses and
+  serial numbers are redacted). Logs: ⋮ › *Enable debug logging*.
+
+## Removal
+
+Settings › Devices & services › Wallbox WEB › ⋮ › **Delete**; then remove the integration from HACS (or delete the
+`custom_components/wallbox_web` folder) and revoke the token in the app.
 
 ## Development
 

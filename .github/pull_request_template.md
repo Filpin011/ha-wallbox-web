@@ -6,5 +6,5 @@
 
 - [ ] Tests added / updated (`scripts/test`), lint clean (`scripts/lint`)
 - [ ] `strings.json`, `translations/en.json`, `translations/it.json` updated if texts changed
-- [ ] README updated if behaviour or entities changed
+- [ ] README.md (English) and README.it.md updated if behaviour or entities changed
 - [ ] No private data (URLs, IPs, serials, tokens) in code, tests or screenshots

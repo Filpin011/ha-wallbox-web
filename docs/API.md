@@ -81,7 +81,7 @@ interface StationState {
   evConnected: boolean;        // Status word0 bit2
   power: {
     activeW: number;           // TransactionData currentPower
-    maxAvailableW: number | null; // "Max disponibile": 230 V × rotary switch A (× 3 three-phase); null if unknown
+    maxAvailableW: number | null; // "Max available" in the app: 230 V × rotary switch A (× 3 three-phase); null if unknown
     limitW: number | null;     // "Limite": MaxPower 33384 (0 → null)
     externalW: number | null;  // ExternalPower 33284 (signed)
   };
@@ -246,5 +246,5 @@ re-sends it when the token changes.
 Integration side (`config_flow.py`): `async_step_hassio(discovery_info: HassioServiceInfo)` reads `config`, builds
 `http://{host}:{port}`, calls `GET /api/v1` with the token, sets `unique_id = instanceId` and
 `_abort_if_unique_id_configured(updates={url, token})` (an existing entry follows a new token/port automatically), then
-`async_step_hassio_confirm` shows "Vuoi configurare Wallbox WEB (add-on)?" and creates the entry. Errors → abort
+`async_step_hassio_confirm` asks "Do you want to configure Home Assistant to connect to the Wallbox WEB server provided by the add-on …?" and creates the entry. Errors → abort
 `cannot_connect` / `api_not_supported`.

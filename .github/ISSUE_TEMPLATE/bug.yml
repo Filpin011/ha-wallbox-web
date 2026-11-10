@@ -1,16 +1,16 @@
-name: Bug report / Segnalazione
-description: Something does not work as expected. / Qualcosa non funziona.
+name: Bug report
+description: Something does not work as expected.
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
         Independent, unofficial project: do not contact the station manufacturer about it.
-        Never paste tokens, public URLs or serial numbers. / Non incollare token, URL pubblici o numeri di serie.
+        Never paste tokens, public URLs or serial numbers.
   - type: textarea
     id: what
     attributes:
-      label: What happened? / Cosa è successo?
+      label: What happened?
     validations:
       required: true
   - type: input
