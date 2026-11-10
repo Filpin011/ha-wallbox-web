@@ -64,8 +64,15 @@ async def test_not_supported_html(session, fake: FakeWallboxWeb) -> None:
         await c.server_info()
 
 
-async def test_connection_error(session) -> None:
+async def test_connection_error(session, monkeypatch) -> None:
     c = WallboxWebClient(session, "http://127.0.0.1:9", TOKEN_FULL)
+
+    def refuse(*_args, **_kwargs):
+        raise aiohttp.ClientConnectionError("connection refused")
+
+    # no real socket in tests (pytest-homeassistant blocks them): simulate a refused connection
+    monkeypatch.setattr(session, "request", refuse)
+    monkeypatch.setattr(session, "get", refuse)
     with pytest.raises(WallboxWebConnectionError):
         await c.server_info()
 

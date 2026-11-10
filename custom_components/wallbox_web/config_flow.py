@@ -109,7 +109,7 @@ class WallboxWebConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=self.add_suggested_values_to_schema(USER_SCHEMA, user_input or {}),
             errors=errors,
-            description_placeholders={"token_page": "/admin/tokens"},
+            description_placeholders={"token_page": "/admin/tokens", "example_url": "https://wallbox.example.com"},
         )
 
     # ---- reauth ------------------------------------------------------------------------------

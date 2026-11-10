@@ -11,7 +11,7 @@
           "verify_ssl": "Verifica certificato SSL"
         },
         "data_description": {
-          "url": "Ad esempio https://wallbox.example.com, senza / finale.",
+          "url": "Ad esempio {example_url}, senza / finale.",
           "token": "Inizia con wbx_. Viene mostrato una sola volta alla creazione.",
           "verify_ssl": "Disattiva solo per un certificato autofirmato in LAN."
         }
